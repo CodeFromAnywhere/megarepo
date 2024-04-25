@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fsPromises from "node:fs/promises";
 import path from "node:path";
 import { getOperationClassification } from "from-anywhere/node";
 import { getOperationPath } from "from-anywhere/node";
@@ -16,13 +16,14 @@ Should be ran every time an operation changes
 
  */
 export const generateSimpleIndex = async (config: {
+  operations: { [key: string]: string };
   /**
    * if given, just exports * from those
    */
   operationName: string;
   manualProjectRoot?: string;
 }): Promise<string | undefined> => {
-  const { operationName, manualProjectRoot } = config;
+  const { operationName, manualProjectRoot, operations } = config;
   if (!operationName) {
     console.log("No operation name, can't create index", { type: "error" });
     return;
@@ -59,7 +60,9 @@ export const generateSimpleIndex = async (config: {
     .map((id) => `export * from "./${id}.js";`)
     .join("\n");
 
-  await fs.writeFile(outputPath, indexationString, { encoding: "utf8" });
+  await fsPromises.writeFile(outputPath, indexationString, {
+    encoding: "utf8",
+  });
 
   return outputPath;
 };

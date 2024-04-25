@@ -3,5 +3,5 @@
  *
  * Since different operations rely on each other, it's important to build everything in the right order. This function takes care of that
  */
-export declare const buildEverythingInRightOrder: (isForced?: boolean) => Promise<void>;
+export declare const buildEverythingInRightOrder: (absoluteFolderPath: string, isForced?: boolean) => Promise<void>;
 //# sourceMappingURL=buildEverythingInRightOrder.d.ts.map

@@ -1,9 +1,9 @@
 import { path } from "from-anywhere/node";
 import { getProjectRoot } from "from-anywhere/node";
 import { getOperationPathsRebuildRequired } from "./getOperationPathsRebuildRequired.js";
-import { operationGetDependencies } from "swc-util";
+// import { operationGetDependencies } from "swc-util";
 import { buildOperationWithHooks } from "./buildOperationWithHooks.js";
-import { update } from "fsorm";
+// import { update } from "fsorm";
 import { OperationInfo } from "./OperationInfo.js";
 import { oneByOne } from "from-anywhere";
 /**
@@ -12,6 +12,7 @@ import { oneByOne } from "from-anywhere";
  * Since different operations rely on each other, it's important to build everything in the right order. This function takes care of that
  */
 export const buildEverythingInRightOrder = async (
+  absoluteFolderPath: string,
   /**
    * If true, will force require everything to be built
    */
@@ -21,19 +22,19 @@ export const buildEverythingInRightOrder = async (
   if (!projectRoot) return;
 
   if (isForced) {
-    await update(
-      "Operation",
-      (item) => ({
-        ...item,
-        operation: { ...item.operation, isBuildSuccessful: false },
-      }),
-      undefined,
-    );
+    // await update(
+    //   "Operation",
+    //   (item) => ({
+    //     ...item,
+    //     operation: { ...item.operation, isBuildSuccessful: false },
+    //   }),
+    //   undefined,
+    // );
     console.log("successfully set all `isBuildSuccessful` to false");
   }
 
   const operationPathsRebuildRequired = (
-    await getOperationPathsRebuildRequired()
+    await getOperationPathsRebuildRequired({ absoluteFolderPath })
   )?.filter((x) => (isForced ? true : x.isBuildRequired));
 
   if (!operationPathsRebuildRequired) return;
@@ -48,7 +49,8 @@ export const buildEverythingInRightOrder = async (
     async ({ absoluteOperationBasePath }) => {
       const operationName = path.parse(absoluteOperationBasePath).base;
 
-      const dependencies = await operationGetDependencies(operationName);
+      //TODO: Fix later
+      const dependencies: string[] = []; // await operationGetDependencies(operationName);
 
       return {
         absoluteOperationBasePath,
@@ -75,9 +77,7 @@ export const buildEverythingInRightOrder = async (
       const operationsCalculatedHasDependencies =
         operationPathsRebuildRequiredLeft.map((operationWithDependencies) => {
           const isDepFilter = (x: OperationInfo) => {
-            const operationName = path.parse(
-              x.projectRelativeOperationPath,
-            ).base;
+            const operationName = path.parse(x.absoluteOperationBasePath).base;
 
             const isDependency =
               operationWithDependencies.dependencies?.includes(operationName) ||
@@ -110,7 +110,7 @@ export const buildEverythingInRightOrder = async (
       const operationPathsWithoutDependencies =
         operationsCalculatedHasDependencies
           .filter((x) => !x.hasDependenciesInThisList)
-          .map((x) => x.projectRelativeOperationPath);
+          .map((x) => x.absoluteOperationBasePath);
 
       const operationsToBuild = allHaveDependencies
         ? [
@@ -121,12 +121,12 @@ export const buildEverythingInRightOrder = async (
                   ? previous
                   : current,
               operationsCalculatedHasDependencies[0],
-            ).projectRelativeOperationPath,
+            ).absoluteOperationBasePath,
           ]
         : operationPathsWithoutDependencies;
 
       const operationsBuildNext = operationsCalculatedHasDependencies.filter(
-        (x) => !operationsToBuild.includes(x.projectRelativeOperationPath),
+        (x) => !operationsToBuild.includes(x.absoluteOperationBasePath),
       );
 
       console.log({

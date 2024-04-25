@@ -1,5 +1,4 @@
-import { postbuild } from "./postbuild.js";
-import { updateSingleNestedJsonFile } from "edit-json-file";
+import { updateSingleNestedJsonFile } from "from-anywhere/node";
 import { path } from "from-anywhere/node";
 import { executeCommandQuietUnlessFail } from "from-anywhere/node";
 import { prebuild } from "./prebuild.js";
@@ -11,7 +10,6 @@ export const buildOperationWithHooks = async (absoluteOperationBasePath) => {
         cwd: absoluteOperationBasePath,
         description: `tsc ${path.parse(absoluteOperationBasePath).base}`,
     });
-    await postbuild(absoluteOperationBasePath);
     await updateSingleNestedJsonFile(path.join(absoluteOperationBasePath, "package.json"), { operation: { lastRebuildAt: Date.now(), isBuildSuccessful } });
     return true;
 };

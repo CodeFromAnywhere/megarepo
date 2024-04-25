@@ -1,7 +1,7 @@
 /**
  * Provide "!" for all
  */
-export declare const buildOperationNames: (operationNames: string[]) => Promise<{
+export declare const buildOperationNames: (absoluteFolderPath: string, operationNames: string[]) => Promise<{
     operationName: string;
     isSuccessful: boolean;
 }[] | undefined>;

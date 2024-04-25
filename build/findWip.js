@@ -8,6 +8,8 @@ For every package:
 
 The overview will show the results in a nice tabular way so you can easily fix them.
 
+TODO: Split this up
+
 */
 export const findWip = () => {
     // for npm, use https://www.npmjs.com/package/npm-api or the source of that (openapi + sdk?)

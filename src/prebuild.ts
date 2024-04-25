@@ -7,6 +7,6 @@ export const prebuild = async (sourceFilePath: string) => {
     return;
   }
   const operationName = path.parse(operationBasePath).base;
-
-  await generateSimpleIndex({ operationName });
+  const operations = {};
+  await generateSimpleIndex({ operationName, operations });
 };

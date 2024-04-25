@@ -7,7 +7,12 @@ import { getOperationPathsRebuildRequired } from "./getOperationPathsRebuildRequ
 /**
  * Provide "!" for all
  */
-export const buildOperationNames = async (operationNames: string[]) => {
+export const buildOperationNames = async (
+  absoluteFolderPath: string,
+  operationNames: string[],
+) => {
+  // TODO;FIX
+  const operations = {};
   console.log({ operationNames });
   const projectRoot = getProjectRoot();
   if (!projectRoot) {
@@ -16,7 +21,7 @@ export const buildOperationNames = async (operationNames: string[]) => {
 
   if (["@", "!"].includes(operationNames[0])) {
     const isForced = operationNames[0] === "@";
-    await buildEverythingInRightOrder(isForced);
+    await buildEverythingInRightOrder(absoluteFolderPath, isForced);
     // await updateSchemaFiles();
     return;
   }
@@ -24,7 +29,7 @@ export const buildOperationNames = async (operationNames: string[]) => {
   if (operationNames[0] === undefined || operationNames[0]?.trim() === "") {
     // NB: none given, let's build the last updated one
     const operationPathsRebuildRequired =
-      await getOperationPathsRebuildRequired();
+      await getOperationPathsRebuildRequired({ absoluteFolderPath });
     if (
       !operationPathsRebuildRequired ||
       operationPathsRebuildRequired.length === 0
@@ -32,10 +37,10 @@ export const buildOperationNames = async (operationNames: string[]) => {
       return;
     }
 
-    const lastOperationProjectRelativePath =
-      operationPathsRebuildRequired[0].projectRelativeOperationPath;
+    const lastOperationAbsolutePath =
+      operationPathsRebuildRequired[0].absoluteOperationBasePath;
 
-    operationNames[0] = path.parse(lastOperationProjectRelativePath).base;
+    operationNames[0] = path.parse(lastOperationAbsolutePath).base;
   }
 
   const result = await oneByOne(operationNames, async (operationName) => {

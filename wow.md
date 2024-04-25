@@ -38,11 +38,8 @@ Whenever publish happened:
 
 # `megarepo build`
 
-- put `lock-util` into `from-anywhere`
-- rename `lock-util` and `edit-json-file` into `from-anywhere/node`
-- `swc-util` needs to become a standalone CLI + api
-- Use that api to be able to generate an openapi from code in a serverless environment
-- Use that for the below apis I want to setup. This way it should be much faster.
+- ✅ put `lock-util` into `from-anywhere`
+- ✅ rename `lock-util` and `edit-json-file` into `from-anywhere/node`
 - make `buidEverythingInRightOrder` work in `megarepo`
 - add command `mr build` connected to `buidEverythingInRightOrder`
 
@@ -61,3 +58,9 @@ Whenever publish happened:
 - ✅ Improve `resolveOpenapiAppRequest` so it takes the entire openapi and resolves all paths, given we have an object of functions.
 - Fix the resolving of urls. Maybe it's just a version change of a dependency.
 - Confirm that it gives a nice types files including the remote URL resolved type.
+
+# SWC
+
+- `swc-util` needs to become a standalone CLI + api
+- Use that api to be able to generate an openapi from code in a serverless environment
+- Use that for the below apis I want to setup. This way it should be much faster.

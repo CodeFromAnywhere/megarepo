@@ -1,16 +1,15 @@
 import { path } from "from-anywhere/node";
 import { getProjectRoot } from "from-anywhere/node";
 import { getOperationPathsRebuildRequired } from "./getOperationPathsRebuildRequired.js";
-import { operationGetDependencies } from "swc-util";
+// import { operationGetDependencies } from "swc-util";
 import { buildOperationWithHooks } from "./buildOperationWithHooks.js";
-import { update } from "fsorm";
 import { oneByOne } from "from-anywhere";
 /**
  * If the runtime is a runtime that requires you to build before running, this is needed. I hope later to use `bun.sh` and move away from this step enirely and lazy-build, but this isn't done yet.
  *
  * Since different operations rely on each other, it's important to build everything in the right order. This function takes care of that
  */
-export const buildEverythingInRightOrder = async (
+export const buildEverythingInRightOrder = async (absoluteFolderPath, 
 /**
  * If true, will force require everything to be built
  */
@@ -19,24 +18,29 @@ isForced) => {
     if (!projectRoot)
         return;
     if (isForced) {
-        await update("Operation", (item) => ({
-            ...item,
-            operation: { ...item.operation, isBuildSuccessful: false },
-        }), undefined);
+        // await update(
+        //   "Operation",
+        //   (item) => ({
+        //     ...item,
+        //     operation: { ...item.operation, isBuildSuccessful: false },
+        //   }),
+        //   undefined,
+        // );
         console.log("successfully set all `isBuildSuccessful` to false");
     }
-    const operationPathsRebuildRequired = (await getOperationPathsRebuildRequired())?.filter((x) => (isForced ? true : x.isBuildRequired));
+    const operationPathsRebuildRequired = (await getOperationPathsRebuildRequired({ absoluteFolderPath }))?.filter((x) => (isForced ? true : x.isBuildRequired));
     if (!operationPathsRebuildRequired)
         return;
     console.log({
         operationPathsRebuildRequiredLength: operationPathsRebuildRequired.length,
     });
     // find dependencies for every operation of which a rebuild is required
-    const operationsWithDependencies = await oneByOne(operationPathsRebuildRequired, async ({ projectRelativeOperationPath }) => {
-        const operationName = path.parse(projectRelativeOperationPath).base;
-        const dependencies = await operationGetDependencies(operationName);
+    const operationsWithDependencies = await oneByOne(operationPathsRebuildRequired, async ({ absoluteOperationBasePath }) => {
+        const operationName = path.parse(absoluteOperationBasePath).base;
+        //TODO: Fix later
+        const dependencies = []; // await operationGetDependencies(operationName);
         return {
-            projectRelativeOperationPath,
+            absoluteOperationBasePath,
             dependencies,
         };
     });
@@ -50,7 +54,7 @@ isForced) => {
         // filter, finding all the operations that have no dependencies that are in this list
         const operationsCalculatedHasDependencies = operationPathsRebuildRequiredLeft.map((operationWithDependencies) => {
             const isDepFilter = (x) => {
-                const operationName = path.parse(x.projectRelativeOperationPath).base;
+                const operationName = path.parse(x.absoluteOperationBasePath).base;
                 const isDependency = operationWithDependencies.dependencies?.includes(operationName) ||
                     false;
                 return isDependency;
@@ -68,16 +72,16 @@ isForced) => {
             operationsCalculatedHasDependencies.length;
         const operationPathsWithoutDependencies = operationsCalculatedHasDependencies
             .filter((x) => !x.hasDependenciesInThisList)
-            .map((x) => x.projectRelativeOperationPath);
+            .map((x) => x.absoluteOperationBasePath);
         const operationsToBuild = allHaveDependencies
             ? [
                 operationsCalculatedHasDependencies.reduce((previous, current) => previous.dependenciesInThisListAmount >
                     current.dependenciesInThisListAmount
                     ? previous
-                    : current, operationsCalculatedHasDependencies[0]).projectRelativeOperationPath,
+                    : current, operationsCalculatedHasDependencies[0]).absoluteOperationBasePath,
             ]
             : operationPathsWithoutDependencies;
-        const operationsBuildNext = operationsCalculatedHasDependencies.filter((x) => !operationsToBuild.includes(x.projectRelativeOperationPath));
+        const operationsBuildNext = operationsCalculatedHasDependencies.filter((x) => !operationsToBuild.includes(x.absoluteOperationBasePath));
         console.log({
             step: currentIndex + 1,
             allHaveDependencies,

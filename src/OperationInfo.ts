@@ -1,5 +1,5 @@
 export type OperationInfo = {
-  projectRelativeOperationPath: string;
+  absoluteOperationBasePath: string;
   dependencies: string[] | undefined;
   hasDependenciesInThisList?: boolean;
   dependenciesInThisListAmount?: number;
