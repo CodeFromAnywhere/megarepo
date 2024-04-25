@@ -2,7 +2,7 @@
   "name": "megarepo",
   "type": "module",
   "main": "build/index.js",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "css": "tailwindcss -o css.css",
     "tsc": "tsc",
