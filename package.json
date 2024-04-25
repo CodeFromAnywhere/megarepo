@@ -1,0 +1,31 @@
+{
+  "name": "megarepo",
+  "type": "module",
+  "main": "build/index.js",
+  "version": "0.0.4",
+  "scripts": {
+    "css": "tailwindcss -o css.css",
+    "tsc": "tsc",
+    "dev": "npx tsc-watch --noClear --onSuccess 'yarn css'",
+    "dev:tw": "tailwindcss -w -o css.css",
+    "build": "tsc",
+    "pub": "npm version patch --force && npm publish"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/web": "^0.0.111",
+    "bun-types": "latest"
+  },
+  "license": "ISC",
+  "description": "",
+  "bin": {
+    "megarepo": "./build/megarepo.cli.js",
+    "mr": "./build/megarepo.cli.js"
+  },
+  "dependencies": {
+    "from-anywhere": "^0.0.26"
+  }
+}

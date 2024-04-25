@@ -1,0 +1,2 @@
+# To run this, simply run `./ship.sh` in this folder. If not possible, run `chmod 777 ./ship.sh`
+for d in ./*/ ; do (cd "$d" && npm run pub --if-present && git add . && git commit -m "improvements"; git push); done
