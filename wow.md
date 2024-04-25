@@ -50,7 +50,7 @@ Whenever publish happened:
 - create `findWip` (`mr wip`)
 - create `syncLinks` (`mr link`)
 - create `publishAndPushAllPublishable` (`mr ship`)
-- add commands: `megarepo wip`, `megarepo link`, `megarepo build`, `megarepo ship`
+- ✅ add commands: `megarepo wip`, `megarepo link`, `megarepo build`, `megarepo ship`
 
 # Fix OpenAPI to Typescript
 
