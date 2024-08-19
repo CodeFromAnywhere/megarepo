@@ -30,7 +30,7 @@ export const buildEverythingInRightOrder = async (
     //   }),
     //   undefined,
     // );
-    console.log("successfully set all `isBuildSuccessful` to false");
+    console.log("TODO:successfully set all `isBuildSuccessful` to false");
   }
 
   const operationPathsRebuildRequired = (
@@ -137,10 +137,8 @@ export const buildEverythingInRightOrder = async (
 
       // build those with a certain concurrency that doesn't make us run out of memory
 
-      await oneByOne(operationsToBuild, async (operationPath) => {
-        const absoluteOperationBasePath = path.join(projectRoot, operationPath);
-
-        await buildOperationWithHooks(absoluteOperationBasePath);
+      await oneByOne(operationsToBuild, async (absoluteOperationPath) => {
+        await buildOperationWithHooks(absoluteOperationPath);
       });
 
       // return an array without the ones we just built

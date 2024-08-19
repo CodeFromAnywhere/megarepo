@@ -10,6 +10,10 @@ Megarepo is a monorepo - but not really. It consists of a set of github reposito
 
 More info coming soon.
 
+# Docs
+
+The cli `mr` or `megarepo` will show the available commands.
+
 # Convention
 
 - There is no nestedness in the folder structure (for now)

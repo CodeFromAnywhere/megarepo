@@ -1,4 +1,6 @@
-import fsPromises from "node:fs/promises";
+import fs from "node:fs";
+const fsPromises = fs.promises;
+
 import path from "node:path";
 import { getOperationClassification } from "from-anywhere/node";
 import { getOperationPath } from "from-anywhere/node";

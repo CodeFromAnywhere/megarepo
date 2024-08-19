@@ -21,7 +21,9 @@ WORK SMARTER, NOT HARDER.
 - ✅ Rename `newOperation` to `cfa-create`
 - ✅ Update template of `cfa-create` to include concurrently for tailwind as well as `tsc -w`
 
-# Command to fix `package-lock.json`
+# SYNCING PROBLEM: Command to fix `package-lock.json`
+
+Before this, maybe see if using another thing than `npm` might already solve part of the problem. Also clearly separate the different issues I actually have
 
 If we have `^0.0.5` or anything in our own packages, theres a big chance the package doesn't get updated to the latest version. Maybe this is `package-lock.json` at work? In this case, maybe there should be a predeploy that refreshes all packages to the latest version. This way we can be certain about the version number.
 
@@ -40,10 +42,10 @@ Whenever publish happened:
 
 - ✅ put `lock-util` into `from-anywhere`
 - ✅ rename `lock-util` and `edit-json-file` into `from-anywhere/node`
-- make `buidEverythingInRightOrder` work in `megarepo`
-- add command `mr build` connected to `buidEverythingInRightOrder`
+- ✅ add command `mr build` connected to `buidEverythingInRightOrder`
+- 🟠 make `buidEverythingInRightOrder` work in `megarepo`
 
-🎉 I can now consistently build everything with a simple command
+🎉 I can now consistently build everything with a simple command.
 
 # Other commands `megarepo`
 
@@ -51,6 +53,10 @@ Whenever publish happened:
 - create `syncLinks` (`mr link`)
 - create `publishAndPushAllPublishable` (`mr ship`)
 - ✅ add commands: `megarepo wip`, `megarepo link`, `megarepo build`, `megarepo ship`
+
+# 🔴 TODO
+
+fix proper linking and package-lock updating so I can easily develop across independent packages. Everything should be linked to everything.
 
 # Fix OpenAPI to Typescript
 

@@ -1,7 +1,7 @@
 import { Operation } from "from-anywhere/types";
 import { updateSingleNestedJsonFile } from "from-anywhere/node";
 import { path } from "from-anywhere/node";
-import { executeCommandQuietUnlessFail } from "from-anywhere/node";
+import { executeCommandQuietUnlessFail } from "./executeCommandQuietUnlessFail.js";
 import { prebuild } from "./prebuild.js";
 export const buildOperationWithHooks = async (
   absoluteOperationBasePath: string,

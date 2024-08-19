@@ -17,6 +17,7 @@
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/web": "^0.0.111",
+    "bun": "^1.1.10",
     "bun-types": "latest"
   },
   "license": "ISC",
@@ -26,6 +27,6 @@
     "mr": "./build/megarepo.cli.js"
   },
   "dependencies": {
-    "from-anywhere": "^0.0.26"
+    "from-anywhere": "^0.0.29"
   }
 }

@@ -14,7 +14,7 @@ const cli = async () => {
       ? path.join(process.cwd(), basePath || ".")
       : basePath;
 
-  console.log({ command });
+  console.log({ command, absoluteFolderPath });
   if (command === "clis") {
     await findClis({ absoluteFolderPath }).then((result) => {
       if (result.badClis.length) {

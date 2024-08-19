@@ -26,7 +26,7 @@ isForced) => {
         //   }),
         //   undefined,
         // );
-        console.log("successfully set all `isBuildSuccessful` to false");
+        console.log("TODO:successfully set all `isBuildSuccessful` to false");
     }
     const operationPathsRebuildRequired = (await getOperationPathsRebuildRequired({ absoluteFolderPath }))?.filter((x) => (isForced ? true : x.isBuildRequired));
     if (!operationPathsRebuildRequired)
@@ -88,9 +88,8 @@ isForced) => {
             operationsToBuild,
         });
         // build those with a certain concurrency that doesn't make us run out of memory
-        await oneByOne(operationsToBuild, async (operationPath) => {
-            const absoluteOperationBasePath = path.join(projectRoot, operationPath);
-            await buildOperationWithHooks(absoluteOperationBasePath);
+        await oneByOne(operationsToBuild, async (absoluteOperationPath) => {
+            await buildOperationWithHooks(absoluteOperationPath);
         });
         // return an array without the ones we just built
         return operationsBuildNext;
